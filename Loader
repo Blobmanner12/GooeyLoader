@@ -1,33 +1,21 @@
--- Version 1.0: Rebranded to Gooey Hub and updated all LuaArmor loader URLs to their definitive versions.
-
 repeat task.wait() until game:IsLoaded()
 
---// === Gooey Hub Configuration ===
 local Hub = "Gooey Hub"
 local Discord_Invite = "https://discord.gg/z6ngteTcT3"
 local Key_Link = "https://ads.luarmor.net/get_key?for=-lgGHKWosXGmT"
 
---// === RE-ARCHITECTED URL MAPPING ===
 local ID_to_LoaderURL_Map = {
-	-- Gooey Hub MVSD
 	[13771457545] = "https://api.luarmor.net/files/v3/loaders/f3132cd60441f8c933fdab4aef53690e.lua",
 	[12355337193] = "https://api.luarmor.net/files/v3/loaders/f3132cd60441f8c933fdab4aef53690e.lua",
-
-	-- Gooey Hub 99 Nights
 	[79546208627805] = "https://api.luarmor.net/files/v3/loaders/6eb7647b393c69902c422d9d310a32f8.lua",
     [126509999114328] = "https://api.luarmor.net/files/v3/loaders/6eb7647b393c69902c422d9d310a32f8.lua",
-
-	-- Gooey Hub Slap Battles
 	[6403373529] = "https://api.luarmor.net/files/v3/loaders/1a8d444991955b4b20c00bc27569c251.lua",
 }
--------------------------------------------
 
---// === SERVICES & VARIABLES ===
 local MarketplaceService = game:GetService("MarketplaceService")
 local uiElements = {}
 local isSubmitting = false
 
---// === Game Detection Logic ===
 local function getLoaderURL()
     local placeId = game.PlaceId
     if ID_to_LoaderURL_Map[placeId] then return ID_to_LoaderURL_Map[placeId] end
@@ -45,7 +33,6 @@ if not detectedLoaderURL then
     return
 end
 
---// === Execution Logic ===
 local function executeLoader()
     if isSubmitting then return end; isSubmitting = true
     local key = uiElements.KeyInput.Text
@@ -62,16 +49,9 @@ local function executeLoader()
         uiElements.ScreenGui:Destroy()
     end
     
-    local pcallSuccess, pcallResult = pcall(function()
-        loadstring(game:HttpGet(detectedLoaderURL))()
-    end)
-    
-    if not pcallSuccess then
-        warn("Gooey Hub: LuaArmor execution failed.", pcallResult)
-    end
+    loadstring(game:HttpGet(detectedLoaderURL))()
 end
 
---// === UI Construction & Connections ===
 local function buildNativeUI()
     local screenGui = Instance.new("ScreenGui", game:GetService("CoreGui")); screenGui.Name = "GooeyHub_Loader"; screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling; uiElements.ScreenGui = screenGui
     local mainFrame = Instance.new("Frame"); mainFrame.Size = UDim2.new(0, 320, 0, 240); mainFrame.Position = UDim2.new(0.5, -160, 0.5, -120); mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45); mainFrame.BorderSizePixel = 0; mainFrame.Draggable = true; mainFrame.Active = true; mainFrame.Parent = screenGui; Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 8)
@@ -90,6 +70,5 @@ local function connectEvents()
     uiElements.JoinDiscordButton.MouseButton1Click:Connect(function() setclipboard(Discord_Invite); showButtonFeedback(uiElements.JoinDiscordButton, "Copied!") end)
 end
 
---// === FINAL INITIALIZATION ===
 buildNativeUI()
 connectEvents()

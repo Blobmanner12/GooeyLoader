@@ -1,192 +1,95 @@
-repeat
-    task.wait()
-until game:IsLoaded()
+-- Version 1.0: Rebranded to Gooey Hub and updated all LuaArmor loader URLs to their definitive versions.
 
-local Hub = 'Nyx Hub'
-local Discord_Invite = 'https://discord.gg/z6ngteTcT3'
-local Key_Link = 'https://ads.luarmor.net/get_key?for=-lgGHKWosXGmT'
+repeat task.wait() until game:IsLoaded()
 
+--// === Gooey Hub Configuration ===
+local Hub = "Gooey Hub"
+local Discord_Invite = "https://discord.gg/z6ngteTcT3"
+local Key_Link = "https://ads.luarmor.net/get_key?for=-lgGHKWosXGmT"
+
+--// === RE-ARCHITECTED URL MAPPING ===
 local ID_to_LoaderURL_Map = {
-    [13771457545] = 'https://api.luarmor.net/files/v3/loaders/120b85a6a3d100b4c0e9a86cfeeae00e.lua',
-    [12355337193] = 'https://api.luarmor.net/files/v3/loaders/120b85a6a3d100b4c0e9a86cfeeae00e.lua',
-    [79546208627805] = 'https://api.luarmor.net/files/v3/loaders/e336d4cb4b86c0a9e15f8fdd6e273b35.lua',
-    [126509999114328] = 'https://api.luarmor.net/files/v3/loaders/e336d4cb4b86c0a9e15f8fdd6e273b35.lua',
-    [6403373529] = 'https://api.luarmor.net/files/v3/loaders/d8103d3884f045718dd12da0fc056c85.lua',
-}
+	-- Gooey Hub MVSD
+	[13771457545] = "https://api.luarmor.net/files/v3/loaders/f3132cd60441f8c933fdab4aef53690e.lua",
+	[12355337193] = "https://api.luarmor.net/files/v3/loaders/f3132cd60441f8c933fdab4aef53690e.lua",
 
-local MarketplaceService = game:GetService('MarketplaceService')
+	-- Gooey Hub 99 Nights
+	[79546208627805] = "https://api.luarmor.net/files/v3/loaders/6eb7647b393c69902c422d9d310a32f8.lua",
+    [126509999114328] = "https://api.luarmor.net/files/v3/loaders/6eb7647b393c69902c422d9d310a32f8.lua",
+
+	-- Gooey Hub Slap Battles
+	[6403373529] = "https://api.luarmor.net/files/v3/loaders/1a8d444991955b4b20c00bc27569c251.lua",
+}
+-------------------------------------------
+
+--// === SERVICES & VARIABLES ===
+local MarketplaceService = game:GetService("MarketplaceService")
 local uiElements = {}
 local isSubmitting = false
 
+--// === Game Detection Logic ===
 local function getLoaderURL()
     local placeId = game.PlaceId
-    if ID_to_LoaderURL_Map[placeId] then
-        return ID_to_LoaderURL_Map[placeId]
-    end
-    local success, result = pcall(
-        MarketplaceService.GetProductInfo,
-        MarketplaceService,
-        placeId
-    )
-    if success and result and result.UniverseId then
-        if ID_to_LoaderURL_Map[result.UniverseId] then
-            return ID_to_LoaderURL_Map[result.UniverseId]
-        end
-    end
+    if ID_to_LoaderURL_Map[placeId] then return ID_to_LoaderURL_Map[placeId] end
+    local success, result = pcall(MarketplaceService.GetProductInfo, MarketplaceService, placeId)
+    if success and result and result.UniverseId then if ID_to_LoaderURL_Map[result.UniverseId] then return ID_to_LoaderURL_Map[result.UniverseId] end end
     return nil
 end
 
 local detectedLoaderURL = getLoaderURL()
 
 if not detectedLoaderURL then
-    local tempGui = Instance.new('ScreenGui', game:GetService('CoreGui'))
-    local tempLabel = Instance.new('TextLabel', tempGui)
-    tempLabel.Size = UDim2.fromOffset(400, 50)
-    tempLabel.Position = UDim2.fromScale(0.5, 0.5)
-    tempLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-    tempLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    tempLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    tempLabel.Font = Enum.Font.GothamBold
-    tempLabel.TextSize = 20
-    tempLabel.Text = 'Nyx Hub: Game Not Supported'
-    Instance.new('UICorner', tempLabel).CornerRadius = UDim.new(0, 6)
-    task.wait(10)
-    tempGui:Destroy()
+    local tempGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+    local tempLabel = Instance.new("TextLabel", tempGui); tempLabel.Size = UDim2.fromOffset(400, 50); tempLabel.Position = UDim2.fromScale(0.5, 0.5); tempLabel.AnchorPoint = Vector2.new(0.5, 0.5); tempLabel.BackgroundColor3 = Color3.fromRGB(30,30,30); tempLabel.TextColor3 = Color3.fromRGB(255,255,255); tempLabel.Font = Enum.Font.GothamBold; tempLabel.TextSize = 20; tempLabel.Text = "Gooey Hub: Game Not Supported"; Instance.new("UICorner", tempLabel).CornerRadius = UDim.new(0, 6)
+    task.wait(10); tempGui:Destroy()
     return
 end
 
+--// === Execution Logic ===
 local function executeLoader()
-    if isSubmitting then
-        return
-    end
-    isSubmitting = true
+    if isSubmitting then return end; isSubmitting = true
     local key = uiElements.KeyInput.Text
-    if not key or key:match('^%s*$') then
-        local originalText = uiElements.SubmitButton.Text
-        uiElements.SubmitButton.Text = 'Key is Empty!'
+    if not key or key:match("^%s*$") then
+        local originalText = uiElements.SubmitButton.Text; uiElements.SubmitButton.Text = "Key is Empty!"
         task.wait(2)
-        if uiElements.SubmitButton and uiElements.SubmitButton.Parent then
-            uiElements.SubmitButton.Text = originalText
-        end
-        isSubmitting = false
-        return
+        if uiElements.SubmitButton and uiElements.SubmitButton.Parent then uiElements.SubmitButton.Text = originalText end
+        isSubmitting = false; return
     end
-
+    
     getgenv().script_key = key
-
+    
     if uiElements.ScreenGui then
         uiElements.ScreenGui:Destroy()
     end
-
+    
     local pcallSuccess, pcallResult = pcall(function()
         loadstring(game:HttpGet(detectedLoaderURL))()
     end)
-
+    
     if not pcallSuccess then
-        warn('Nyx Hub: LuaArmor execution failed.', pcallResult)
+        warn("Gooey Hub: LuaArmor execution failed.", pcallResult)
     end
 end
 
+--// === UI Construction & Connections ===
 local function buildNativeUI()
-    local screenGui = Instance.new('ScreenGui', game:GetService('CoreGui'))
-    screenGui.Name = 'NyxHub_Loader'
-    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    uiElements.ScreenGui = screenGui
-    local mainFrame = Instance.new('Frame')
-    mainFrame.Size = UDim2.new(0, 320, 0, 240)
-    mainFrame.Position = UDim2.new(0.5, -160, 0.5, -120)
-    mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-    mainFrame.BorderSizePixel = 0
-    mainFrame.Draggable = true
-    mainFrame.Active = true
-    mainFrame.Parent = screenGui
-    Instance.new('UICorner', mainFrame).CornerRadius = UDim.new(0, 8)
-    local titleLabel = Instance.new('TextLabel')
-    titleLabel.Size = UDim2.new(1, 0, 0, 40)
-    titleLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    titleLabel.Font = Enum.Font.GothamBold
-    titleLabel.TextSize = 20
-    titleLabel.Text = Hub
-    titleLabel.Parent = mainFrame
-    Instance.new('UICorner', titleLabel).CornerRadius = UDim.new(0, 8)
-    local keyInput = Instance.new('TextBox')
-    keyInput.Size = UDim2.new(1, -40, 0, 35)
-    keyInput.Position = UDim2.new(0.5, -((320 - 40) / 2), 0, 60)
-    keyInput.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    keyInput.TextColor3 = Color3.fromRGB(220, 220, 220)
-    keyInput.PlaceholderColor3 = Color3.fromRGB(120, 120, 130)
-    keyInput.PlaceholderText = 'Paste your key here...'
-    keyInput.Font = Enum.Font.Gotham
-    keyInput.TextSize = 16
-    keyInput.ClearTextOnFocus = false
-    keyInput.Parent = mainFrame
-    Instance.new('UICorner', keyInput).CornerRadius = UDim.new(0, 6)
-    uiElements.KeyInput = keyInput
-    local submitButton = Instance.new('TextButton')
-    submitButton.Size = UDim2.new(1, -40, 0, 40)
-    submitButton.Position = UDim2.new(0.5, -((320 - 40) / 2), 0, 110)
-    submitButton.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
-    submitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    submitButton.Font = Enum.Font.GothamBold
-    submitButton.TextSize = 18
-    submitButton.Text = 'Submit Key'
-    submitButton.Parent = mainFrame
-    Instance.new('UICorner', submitButton).CornerRadius = UDim.new(0, 6)
-    uiElements.SubmitButton = submitButton
-    local getKeyButton = Instance.new('TextButton')
-    getKeyButton.Size = UDim2.new(0.5, -30, 0, 30)
-    getKeyButton.Position = UDim2.new(0.25, -((320 / 2 - 30) / 2) - 5, 0, 170)
-    getKeyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-    getKeyButton.TextColor3 = Color3.fromRGB(220, 220, 220)
-    getKeyButton.Font = Enum.Font.Gotham
-    getKeyButton.TextSize = 14
-    getKeyButton.Text = 'Get Key'
-    getKeyButton.Parent = mainFrame
-    Instance.new('UICorner', getKeyButton).CornerRadius = UDim.new(0, 6)
-    uiElements.GetKeyButton = getKeyButton
-    local joinDiscordButton = Instance.new('TextButton')
-    joinDiscordButton.Size = UDim2.new(0.5, -30, 0, 30)
-    joinDiscordButton.Position = UDim2.new(
-        0.75,
-        -((320 / 2 - 30) / 2) + 5,
-        0,
-        170
-    )
-    joinDiscordButton.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-    joinDiscordButton.TextColor3 = Color3.fromRGB(220, 220, 220)
-    joinDiscordButton.Font = Enum.Font.Gotham
-    joinDiscordButton.TextSize = 14
-    joinDiscordButton.Text = 'Join Discord'
-    joinDiscordButton.Parent = mainFrame
-    Instance.new('UICorner', joinDiscordButton).CornerRadius = UDim.new(0, 6)
-    uiElements.JoinDiscordButton = joinDiscordButton
+    local screenGui = Instance.new("ScreenGui", game:GetService("CoreGui")); screenGui.Name = "GooeyHub_Loader"; screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling; uiElements.ScreenGui = screenGui
+    local mainFrame = Instance.new("Frame"); mainFrame.Size = UDim2.new(0, 320, 0, 240); mainFrame.Position = UDim2.new(0.5, -160, 0.5, -120); mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45); mainFrame.BorderSizePixel = 0; mainFrame.Draggable = true; mainFrame.Active = true; mainFrame.Parent = screenGui; Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 8)
+    local titleLabel = Instance.new("TextLabel"); titleLabel.Size = UDim2.new(1, 0, 0, 40); titleLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 40); titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255); titleLabel.Font = Enum.Font.GothamBold; titleLabel.TextSize = 20; titleLabel.Text = Hub; titleLabel.Parent = mainFrame; Instance.new("UICorner", titleLabel).CornerRadius = UDim.new(0, 8)
+    local keyInput = Instance.new("TextBox"); keyInput.Size = UDim2.new(1, -40, 0, 35); keyInput.Position = UDim2.new(0.5, -((320 - 40) / 2), 0, 60); keyInput.BackgroundColor3 = Color3.fromRGB(25, 25, 35); keyInput.TextColor3 = Color3.fromRGB(220, 220, 220); keyInput.PlaceholderColor3 = Color3.fromRGB(120, 120, 130); keyInput.PlaceholderText = "Paste your key here..."; keyInput.Font = Enum.Font.Gotham; keyInput.TextSize = 16; keyInput.ClearTextOnFocus = false; keyInput.Parent = mainFrame; Instance.new("UICorner", keyInput).CornerRadius = UDim.new(0, 6); uiElements.KeyInput = keyInput
+    local submitButton = Instance.new("TextButton"); submitButton.Size = UDim2.new(1, -40, 0, 40); submitButton.Position = UDim2.new(0.5, -((320 - 40) / 2), 0, 110); submitButton.BackgroundColor3 = Color3.fromRGB(88, 101, 242); submitButton.TextColor3 = Color3.fromRGB(255, 255, 255); submitButton.Font = Enum.Font.GothamBold; submitButton.TextSize = 18; submitButton.Text = "Submit Key"; submitButton.Parent = mainFrame; Instance.new("UICorner", submitButton).CornerRadius = UDim.new(0, 6); uiElements.SubmitButton = submitButton
+    local getKeyButton = Instance.new("TextButton"); getKeyButton.Size = UDim2.new(0.5, -30, 0, 30); getKeyButton.Position = UDim2.new(0.25, -((320 / 2 - 30) / 2) - 5, 0, 170); getKeyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 60); getKeyButton.TextColor3 = Color3.fromRGB(220, 220, 220); getKeyButton.Font = Enum.Font.Gotham; getKeyButton.TextSize = 14; getKeyButton.Text = "Get Key"; getKeyButton.Parent = mainFrame; Instance.new("UICorner", getKeyButton).CornerRadius = UDim.new(0, 6); uiElements.GetKeyButton = getKeyButton
+    local joinDiscordButton = Instance.new("TextButton"); joinDiscordButton.Size = UDim2.new(0.5, -30, 0, 30); joinDiscordButton.Position = UDim2.new(0.75, -((320 / 2 - 30) / 2) + 5, 0, 170); joinDiscordButton.BackgroundColor3 = Color3.fromRGB(50, 50, 60); joinDiscordButton.TextColor3 = Color3.fromRGB(220, 220, 220); joinDiscordButton.Font = Enum.Font.Gotham; joinDiscordButton.TextSize = 14; joinDiscordButton.Text = "Join Discord"; joinDiscordButton.Parent = mainFrame; Instance.new("UICorner", joinDiscordButton).CornerRadius = UDim.new(0, 6); uiElements.JoinDiscordButton = joinDiscordButton
 end
 
 local function connectEvents()
-    local function showButtonFeedback(button, message)
-        local originalText = button.Text
-        button.Text = message
-        task.wait(2)
-        if button and button.Parent then
-            button.Text = originalText
-        end
-    end
+    local function showButtonFeedback(button, message) local originalText = button.Text; button.Text = message; task.wait(2); if button and button.Parent then button.Text = originalText end end
     uiElements.SubmitButton.MouseButton1Click:Connect(executeLoader)
-    uiElements.KeyInput.FocusLost:Connect(function(enterPressed)
-        if enterPressed then
-            executeLoader()
-        end
-    end)
-    uiElements.GetKeyButton.MouseButton1Click:Connect(function()
-        setclipboard(Key_Link)
-        showButtonFeedback(uiElements.GetKeyButton, 'Copied!')
-    end)
-    uiElements.JoinDiscordButton.MouseButton1Click:Connect(function()
-        setclipboard(Discord_Invite)
-        showButtonFeedback(uiElements.JoinDiscordButton, 'Copied!')
-    end)
+    uiElements.KeyInput.FocusLost:Connect(function(enterPressed) if enterPressed then executeLoader() end end)
+    uiElements.GetKeyButton.MouseButton1Click:Connect(function() setclipboard(Key_Link); showButtonFeedback(uiElements.GetKeyButton, "Copied!") end)
+    uiElements.JoinDiscordButton.MouseButton1Click:Connect(function() setclipboard(Discord_Invite); showButtonFeedback(uiElements.JoinDiscordButton, "Copied!") end)
 end
 
+--// === FINAL INITIALIZATION ===
 buildNativeUI()
 connectEvents()

@@ -4,12 +4,14 @@ local Hub = "Gooey Hub"
 local Discord_Invite = "https://discord.gg/z6ngteTcT3"
 local Key_Link = "https://ads.luarmor.net/get_key?for=-lgGHKWosXGmT"
 
+-- [DEFINITIVE CORRECTION] Added the new Game ID and Loader URL for Arsenal.
 local ID_to_LoaderURL_Map = {
 	[13771457545] = "https://api.luarmor.net/files/v3/loaders/f3132cd60441f8c933fdab4aef53690e.lua",
 	[12355337193] = "https://api.luarmor.net/files/v3/loaders/f3132cd60441f8c933fdab4aef53690e.lua",
 	[79546208627805] = "https://api.luarmor.net/files/v3/loaders/6eb7647b393c69902c422d9d310a32f8.lua",
     [126509999114328] = "https://api.luarmor.net/files/v3/loaders/6eb7647b393c69902c422d9d310a32f8.lua",
 	[6403373529] = "https://api.luarmor.net/files/v3/loaders/1a8d444991955b4b20c00bc27569c251.lua",
+    [286090429] = "https://api.luarmor.net/files/v3/loaders/7b3b8b68b539a8d3d8bf8fbfa1694b76.lua"
 }
 
 local MarketplaceService = game:GetService("MarketplaceService")

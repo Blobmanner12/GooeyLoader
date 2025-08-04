@@ -4,7 +4,7 @@ local Hub = "Gooey Hub"
 local Discord_Invite = "https://discord.gg/z6ngteTcT3"
 local Key_Link = "https://ads.luarmor.net/get_key?for=-lgGHKWosXGmT"
 
--- [DEFINITIVE CORRECTION] Added the new Game ID and Loader URL for Arsenal.
+-- Added the new Game ID and Loader URL for Arsenal.
 local ID_to_LoaderURL_Map = {
 	[13771457545] = "https://api.luarmor.net/files/v3/loaders/f3132cd60441f8c933fdab4aef53690e.lua",
 	[12355337193] = "https://api.luarmor.net/files/v3/loaders/f3132cd60441f8c933fdab4aef53690e.lua",
